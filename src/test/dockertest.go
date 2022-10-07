@@ -21,13 +21,11 @@ const (
 func CreateMySQLContainer(sqlFileName string) (*dockertest.Resource, *dockertest.Pool) {
 	// connect to docker
 	pool, err := dockertest.NewPool("")
-	pool.MaxWait = time.Minute * 1
 	if err != nil {
 		log.Fatalf("Could not connect to docker: %s", err)
 	}
 
 	pwd, _ := os.Getwd()
-	fmt.Println(pwd + "/" + sqlFileName)
 	// mysql options
 	runOptions := &dockertest.RunOptions{
 		Repository: "mysql",
@@ -71,10 +69,10 @@ func ConnectMySQLContainer(resource *dockertest.Resource, pool *dockertest.Pool,
 	)
 	if err := pool.Retry(func() error {
 		// wait for container setup
-		time.Sleep(time.Second * 20)
+		time.Sleep(time.Second * 5)
 		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 		if err != nil {
-			return nil
+			return err
 		}
 		sqlDB, err := db.DB()
 		if err != nil {
