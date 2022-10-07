@@ -71,7 +71,7 @@ func ConnectMySQLContainer(resource *dockertest.Resource, pool *dockertest.Pool,
 	)
 	if err := pool.Retry(func() error {
 		// wait for container setup
-		time.Sleep(time.Second * 10)
+		time.Sleep(time.Second * 20)
 		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 		if err != nil {
 			return nil
